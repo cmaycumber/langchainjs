@@ -13,14 +13,21 @@ interface Element {
   };
 }
 
+interface Options {
+  mode: "single" | "elements";
+  strategy: "fast" | "hi_res";
+}
+
 export class UnstructuredLoader extends BaseDocumentLoader {
   constructor(
     public webPath: string,
     public filePath: string,
-    public mode: string = "single"
+    public options: Partial<Options>
   ) {
     super();
-    this.mode = mode;
+
+    // Set the default options for the unstructured API
+    this.options = { mode: "single", strategy: "fast", ...options };
 
     this.filePath = filePath;
 
@@ -38,7 +45,9 @@ export class UnstructuredLoader extends BaseDocumentLoader {
     // worried about this for now.
     const formData = new FormData();
     formData.append("files", new Blob([buffer]), fileName);
-    formData.append("mode", this.mode);
+    if (this.options.mode) formData.append("mode", this.options.mode);
+    if (this.options.strategy)
+      formData.append("strategy", this.options.strategy);
 
     const response = await fetch(this.webPath, {
       method: "POST",
