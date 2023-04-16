@@ -14,8 +14,14 @@ interface Element {
 }
 
 export class UnstructuredLoader extends BaseDocumentLoader {
-  constructor(public webPath: string, public filePath: string) {
+  constructor(
+    public webPath: string,
+    public filePath: string,
+    public mode: string = "single"
+  ) {
     super();
+    this.mode = mode;
+
     this.filePath = filePath;
 
     this.webPath = webPath;
@@ -32,6 +38,7 @@ export class UnstructuredLoader extends BaseDocumentLoader {
     // worried about this for now.
     const formData = new FormData();
     formData.append("files", new Blob([buffer]), fileName);
+    formData.append("mode", this.mode);
 
     const response = await fetch(this.webPath, {
       method: "POST",
