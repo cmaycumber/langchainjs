@@ -14,7 +14,6 @@ interface Element {
 }
 
 interface UnstructuredAPIOptions {
-  mode: "single" | "elements";
   strategy: "fast" | "hi_res";
 }
 
@@ -27,7 +26,7 @@ export class UnstructuredLoader extends BaseDocumentLoader {
     super();
 
     // Set the default options for the unstructured API
-    this.options = { mode: "single", strategy: "fast", ...options };
+    this.options = {  strategy: "fast", ...options };
 
     this.filePath = filePath;
 
@@ -45,7 +44,6 @@ export class UnstructuredLoader extends BaseDocumentLoader {
     // worried about this for now.
     const formData = new FormData();
     formData.append("files", new Blob([buffer]), fileName);
-    if (this.options?.mode) formData.append("mode", this.options.mode);
     if (this.options?.strategy)
       formData.append("strategy", this.options.strategy);
 
